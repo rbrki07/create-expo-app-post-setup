@@ -1,6 +1,6 @@
 # create-expo-app-post-setup
 A few common setup steps to perform after `create-expo-app` has finished its magic:
-* Install `eslint`, `eslint-plugin-react-native`, `eslint-plugin-react-hooks`, `eslint-plugin-jest` and download a ready-to-use ESLint configuration file.
+* Install `eslint`, `eslint-config-universe`, `eslint-plugin-jest` and download a ready-to-use ESLint configuration file. This is based on [Expo's recommendations](https://docs.expo.dev/guides/using-eslint/).
 * Install `prettier` and download a ready-to-use Prettier configuration file.
 * Download VS Code specific configurations files (`extensions.json` and `settings.json`) to ensure ESLint and Prettier will be used as intended.
 

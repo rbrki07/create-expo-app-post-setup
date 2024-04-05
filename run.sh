@@ -4,8 +4,12 @@ set -e
  
 # Local variables
 github_repo="https://raw.githubusercontent.com/rbrki07/create-expo-app-post-setup/main"
+package_file="package.json"
+package_tmp_file="package.json.tmp"
 eslint_config_file=".eslintrc.json"
+eslint_ignore_file=".eslintignore"
 prettier_config_file=".prettierrc.json"
+prettier_ignore_file=".prettierignore"
 vscode_extensions_config_file="extensions.json"
 vscode_settings_config_file="settings.json"
 
@@ -38,6 +42,19 @@ if ! command -v curl > /dev/null; then
 	exit 1
 fi
 
+echo "Looking for jq..."
+if ! command -v jq > /dev/null; then
+	echo "Not found."
+	echo ""
+	echo "=============================================================================================================="
+	echo " Please install jq on your system."
+	echo ""
+	echo " Restart after installing jq."
+	echo "=============================================================================================================="
+	echo ""
+	exit 1
+fi
+
 echo "=============================================================================================================="
 echo "Installing ESLint..."
 echo "=============================================================================================================="
@@ -48,17 +65,22 @@ echo "==========================================================================
 echo "Installing ESLint plugins..."
 echo "=============================================================================================================="
 
-npm install --silent --save-dev eslint-plugin-react-native
-npm install --silent --save-dev eslint-plugin-react-hooks
+npm install --silent --save-dev eslint-config-universe
 npm install --silent --save-dev eslint-plugin-jest
 
-
 echo "=============================================================================================================="
-echo "Downloading ESLint config-file..."
+echo "Downloading ESLint config and ignore file..."
 echo "=============================================================================================================="
 
 echo "* Downloading..."
 curl --fail --location --progress-bar "$github_repo/templates/eslint/$eslint_config_file" > "$eslint_config_file"
+curl --fail --location --progress-bar "$github_repo/templates/eslint/$eslint_ignore_file" > "$eslint_ignore_file"
+
+echo "=============================================================================================================="
+echo "Add scripts 'lint' and 'lint:fix' to package.json..."
+echo "=============================================================================================================="
+
+jq '.scripts += { "lint": "eslint .", "lint:fix": "eslint --fix ." }' $package_file > $package_tmp_file && mv $package_tmp_file $package_file
 
 echo "=============================================================================================================="
 echo "Installing Prettier..."
@@ -67,11 +89,18 @@ echo "==========================================================================
 npm install --silent --save-dev prettier
 
 echo "=============================================================================================================="
-echo "Downloading Prettier config-file..."
+echo "Downloading Prettier config and ignore file..."
 echo "=============================================================================================================="
 
 echo "* Downloading..."
 curl --fail --location --progress-bar "$github_repo/templates/prettier/$prettier_config_file" > "$prettier_config_file"
+curl --fail --location --progress-bar "$github_repo/templates/prettier/$prettier_ignore_file" > "$prettier_ignore_file"
+
+echo "=============================================================================================================="
+echo "Add scripts 'format' and 'format:fix' to package.json..."
+echo "=============================================================================================================="
+
+jq '.scripts += { "format": "prettier --check .", "format:fix": "prettier --check ." }' $package_file > $package_tmp_file && mv $package_tmp_file $package_file
 
 echo "=============================================================================================================="
 echo "Creating local directory '.vscode'..."
