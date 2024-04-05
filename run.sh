@@ -10,6 +10,7 @@ eslint_config_file=".eslintrc.json"
 eslint_ignore_file=".eslintignore"
 prettier_config_file=".prettierrc.json"
 prettier_ignore_file=".prettierignore"
+simple_git_hooks_config_file=".simple-git-hooks.json"
 vscode_extensions_config_file="extensions.json"
 vscode_settings_config_file="settings.json"
 
@@ -102,6 +103,25 @@ echo "Add scripts 'format' and 'format:fix' to package.json..."
 echo "=============================================================================================================="
 
 jq '.scripts += { "format": "prettier --check .", "format:fix": "prettier --check ." }' $package_file > $package_tmp_file && mv $package_tmp_file $package_file
+
+echo "=============================================================================================================="
+echo "Installing simple-git-hooks..."
+echo "=============================================================================================================="
+
+npm install --silent --save-dev simple-git-hooks
+
+echo "=============================================================================================================="
+echo "Downloading simple-git-hooks config file..."
+echo "=============================================================================================================="
+
+echo "* Downloading..."
+curl --fail --location --progress-bar "$github_repo/templates/simple-git-hooks/$simple_git_hooks_config_file" > "$simple_git_hooks_config_file"
+
+echo "=============================================================================================================="
+echo "Apply simple-git-hooks..."
+echo "=============================================================================================================="
+
+npx simple-git-hooks
 
 echo "=============================================================================================================="
 echo "Creating local directory '.vscode'..."
