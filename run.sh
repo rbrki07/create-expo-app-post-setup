@@ -66,6 +66,7 @@ echo "Installing ESLint plugins..."
 echo "=============================================================================================================="
 
 npm install --silent --save-dev eslint-config-universe
+npm install --silent --save-dev eslint-plugin-react-native
 npm install --silent --save-dev eslint-plugin-jest
 
 echo "=============================================================================================================="
