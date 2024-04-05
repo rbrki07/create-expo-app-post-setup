@@ -102,7 +102,7 @@ echo "==========================================================================
 echo "Add scripts 'format' and 'format:fix' to package.json..."
 echo "=============================================================================================================="
 
-jq '.scripts += { "format": "prettier --check .", "format:fix": "prettier --check ." }' $package_file > $package_tmp_file && mv $package_tmp_file $package_file
+jq '.scripts += { "format": "prettier --check .", "format:fix": "prettier --write ." }' $package_file > $package_tmp_file && mv $package_tmp_file $package_file
 
 echo "=============================================================================================================="
 echo "Installing simple-git-hooks..."
